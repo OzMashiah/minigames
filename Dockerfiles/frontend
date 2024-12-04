@@ -1,0 +1,12 @@
+# Builder container
+FROM node
+
+WORKDIR /usr/src/app
+
+COPY frontend_files ./
+
+RUN npm install 
+
+EXPOSE 3000
+
+CMD ["node", "index.js"] 
