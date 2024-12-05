@@ -51,23 +51,33 @@ function make_move () {
 }
 
 function check_win () {
-	if [ $row2[1] == $row2[2] ] && [ $row2[2] == $row2[3] ]; then
-		echo $row2[1]
-	elif [ $row3[1] == $row3[2] ] && [ $row3[2] == $row3[3] ]; then
-                echo $row3[1]
-	elif [ $row4[1] == $row4[2] ] && [ $row4[2] == $row4[3] ]; then
-                echo $row4[1]
-	elif [ $row2[1] == $row3[1] ] && [ $row3[1] == $row4[1] ]; then
-                echo $row2[1]
-	elif [ $row2[2] == $row3[2] ] && [ $row3[2] == $row4[2] ]; then
-                echo $row2[2]
-	elif [ $row2[3] == $row3[3] ] && [ $row3[3] == $row4[3] ]; then
-                echo $row2[3]
-	elif [ $row2[1] == $row3[2] ] && [ $row3[2] == $row4[3] ]; then
-                echo $row2[1]
-	elif [ $row2[3] == $row3[2] ] && [ $row3[2] == $row4[1] ]; then
-                echo $row2[3]
+	# Check the board for a winner in all possible combinations.
+	# First row condition.
+	if [ ${row2[1]} == ${row2[2]} ] && [ ${row2[2]} == ${row2[3]} ] && [ ${row2[1]} != "." ]; then
+		echo ${row2[1]}
+	# Second row condition.
+	elif [ ${row3[1]} == ${row3[2]} ] && [ ${row3[2]} == ${row3[3]} ] && [ ${row3[1]} != "." ]; then
+                echo ${row3[1]}
+	# Third row condition.
+	elif [ ${row4[1]} == ${row4[2]} ] && [ ${row4[2]} == ${row4[3]} ] && [ ${row4[1]} != "." ]; then
+                echo ${row4[1]}
+	# First column condition.	
+	elif [ ${row2[1]} == ${row3[1]} ] && [ ${row3[1]} == ${row4[1]} ] && [ ${row2[1]} != "." ]; then
+                echo ${row2[1]}
+	# Second column condition.
+	elif [ ${row2[2]} == ${row3[2]} ] && [ ${row3[2]} == ${row4[2]} ] && [ ${row2[2]} != "." ]; then
+                echo ${row2[2]}
+	# Third column condition.
+	elif [ ${row2[3]} == ${row3[3]} ] && [ ${row3[3]} == ${row4[3]} ] && [ ${row2[3]} != "." ]; then
+                echo ${row2[3]}
+	# Top left to bottom right diagonal (\).
+	elif [ ${row2[1]} == ${row3[2]} ] && [ ${row3[2]} == ${row4[3]} ] && [ ${row2[1]} != "." ]; then
+                echo ${row2[1]}
+	# Bottom left to top right diagonal (/).
+	elif [ ${row2[3]} == ${row3[2]} ] && [ ${row3[2]} == ${row4[1]} ] && [ ${row2[3]} != "." ]; then
+                echo ${row2[3]}
 	else
+	# No winner yet.
 		echo "L"
 	fi
 }
