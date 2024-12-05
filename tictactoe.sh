@@ -76,29 +76,33 @@ function check_win () {
 	# Bottom left to top right diagonal (/).
 	elif [ ${row2[3]} == ${row3[2]} ] && [ ${row3[2]} == ${row4[1]} ] && [ ${row2[3]} != "." ]; then
                 echo ${row2[3]}
+	# Tie condition
+	elif [ ${row2[1]} != "." ] && [ ${row2[2]} != "." ] && [ ${row2[3]} != "." ] && \
+		 [ ${row3[1]} != "." ] && [ ${row3[2]} != "." ] && [ ${row3[3]} != "." ] && \
+		 [ ${row4[1]} != "." ] && [ ${row4[2]} != "." ] && [ ${row4[3]} != "." ]; then
+				echo "T"
+	# No winner yet
 	else
-	# No winner yet.
 		echo "L"
 	fi
 }
+
+
+# Main code
 
 # initiate empty board
 init_board
 player_turn=$(choose_starter)
 echo "Player "$player_turn" starts."
 
-win_con=$(check_win)
-
-while [ $win_con == "L" ]
+while [ $(check_win) == "L" ]
 do
 	print_board
 	read -p "please choose a location (for example, A1 for the left top corner): " move
 	make_move $move $player_turn
 	player_turn=$(rotate_player $player_turn)
-	win_con=$(check_win)
 done
 
-winner=$(check_win)
-echo "Player "$winner" won!"
+echo "Player "$(check_win)" won!"
 print_board
 
