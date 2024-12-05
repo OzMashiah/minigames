@@ -3,6 +3,7 @@
 # functions
 
 function init_board () {
+	# This function initiate an empty board.
 	row1=("@" "1" "2" "3")
 	row2=("A" "." "." ".")
 	row3=("B" "." "." ".")
@@ -11,6 +12,7 @@ function init_board () {
 
 
 function print_board () {
+	# This functions print the current board.
 	echo ${row1[*]}
 	echo ${row2[*]}
 	echo ${row3[*]}
@@ -31,6 +33,8 @@ function choose_starter () {
 }
 
 function rotate_player () {
+	# This function changes the turn to the other player.
+	# Gets the which player took a turn and returns the other player.
 	if [[ $1 == "X" ]]; then
 		echo "O"
 	elif [[ $1 == "O" ]]; then
@@ -40,38 +44,29 @@ function rotate_player () {
 
 
 function make_move () {
+	# This function makes a move.
+	# Gets the user's move as the first input and which player's turn is it as the second argument.
 	loc=${1:1:1}
 	if [[ ${1:0:1} == "A" ]]; then
-		if [ ${row2[$loc]} == "." ]; then
-			row2[$loc]=$2
-			echo "G"
-		else
-			echo "!"
-		fi
+		row2[$loc]=$2
 	elif [[ ${1:0:1} == "B" ]]; then
-		if [ ${row3[$loc]} == "." ]; then
-			row3[$loc]=$2
-			echo "G"
-		else
-			echo "!"
-		fi
+		row3[$loc]=$2
 	elif [[ ${1:0:1} == "C" ]]; then
-		if [ ${row4[$loc]} == "." ]; then
-			row4[$loc]=$2
-			echo "G"
-		else
-			echo "!"
-		fi
+		row4[$loc]=$2
 	fi
 }
 
 function check_taken_square () {
+	# Checks if the chosen square is already taken.
+	# Gets the user's move as an input.
 	loc=${1:1:1}
 	if [[ ${1:0:1} == "A" ]]; then
                 if [ ${row2[$loc]} == "." ]; then
-                        echo "G"
+                        # Empty square, G is good.
+			echo "G"
                 else
-                        echo "B"
+                        # Taken sqaure, B is bad.
+			echo "B"
                 fi
         elif [[ ${1:0:1} == "B" ]]; then
                 if [ ${row3[$loc]} == "." ]; then
@@ -89,11 +84,15 @@ function check_taken_square () {
 }
 
 function check_move_bounds () {
+	# Checks that the chosen move is valid (A/B/C and 1/2/3).
+	# Gets the user's move as an input.
 	loc=${1:1:1}
 	col=${1:0:1}
 	if [ $loc -ge 1 ] && [ $loc -le 3 ] && { [ $col == "A" ] || [ $col == "B" ] || [ $col == "C" ]; }; then
+		# Valid move, G is good.
 		echo "G"
 	else
+		# Out of bounds, B is bad.
 		echo "B"
 	fi
 }
@@ -139,11 +138,12 @@ function check_win () {
 
 # Main code
 
-# initiate empty board
+# Initiate game
 init_board
 player_turn=$(choose_starter)
 echo "Player "$player_turn" starts."
 
+# Play the game
 while [ $(check_win) == "L" ]
 do
 	print_board
@@ -160,6 +160,7 @@ do
 	player_turn=$(rotate_player $player_turn)
 done
 
+# Find out the result
 if [ $(check_win) == "T" ]; then
 	echo "It's a tie!"
 else
