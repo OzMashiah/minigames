@@ -65,6 +65,40 @@ function make_move () {
 	fi
 }
 
+function check_taken_square () {
+	loc=${1:1:1}
+	if [[ ${1:0:1} == "A" ]]; then
+                if [ ${row2[$loc]} == "." ]; then
+                        echo "G"
+                else
+                        echo "B"
+                fi
+        elif [[ ${1:0:1} == "B" ]]; then
+                if [ ${row3[$loc]} == "." ]; then
+                        echo "G"
+                else
+                        echo "B"
+                fi
+        elif [[ ${1:0:1} == "C" ]]; then
+                if [ ${row4[$loc]} == "." ]; then
+                        echo "G"
+                else
+                        echo "B"
+                fi
+        fi
+}
+
+function check_move_bounds () {
+	loc=${1:1:1}
+	col=${1:0:1}
+	if [ $loc -ge 1 ] && [ $loc -le 3 ] && { [ $col == "A" ] || [ $col == "B" ] || [ $col == "C" ]; }; then
+		echo "G"
+	else
+		echo "B"
+	fi
+}
+
+
 function check_win () {
 	# Check the board for a winner in all possible combinations.
 	# First row condition.
@@ -114,7 +148,11 @@ while [ $(check_win) == "L" ]
 do
 	print_board
 	read -p "please choose a location (for example, A1 for the left top corner): " move
-	while [ $(make_move $move $player_turn) == "!" ]
+	while [ $(check_move_bounds $move) == "B" ]
+        do
+                read -p "Move is out of bounds (A/B/C and 1/2/3 only), please try again: " move
+        done
+	while [ $(check_taken_square $move) == "B" ]
 	do
 		read -p "This square is already taken, please try again: " move
 	done
