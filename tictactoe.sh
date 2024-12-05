@@ -40,13 +40,28 @@ function rotate_player () {
 
 
 function make_move () {
-	loc=${1:1:2}
+	loc=${1:1:1}
 	if [[ ${1:0:1} == "A" ]]; then
-		row2[$loc]=$2
+		if [ ${row2[$loc]} == "." ]; then
+			row2[$loc]=$2
+			echo "G"
+		else
+			echo "!"
+		fi
 	elif [[ ${1:0:1} == "B" ]]; then
-                row3[$loc]=$2
+		if [ ${row3[$loc]} == "." ]; then
+			row3[$loc]=$2
+			echo "G"
+		else
+			echo "!"
+		fi
 	elif [[ ${1:0:1} == "C" ]]; then
-                row4[$loc]=$2
+		if [ ${row4[$loc]} == "." ]; then
+			row4[$loc]=$2
+			echo "G"
+		else
+			echo "!"
+		fi
 	fi
 }
 
@@ -99,10 +114,18 @@ while [ $(check_win) == "L" ]
 do
 	print_board
 	read -p "please choose a location (for example, A1 for the left top corner): " move
-	make_move $move $player_turn
+	while [ $(make_move $move $player_turn) == "!" ]
+	do
+		read -p "This square is already taken, please try again: " move
+	done
+	make_move $move $player_turn > /dev/null
 	player_turn=$(rotate_player $player_turn)
 done
 
-echo "Player "$(check_win)" won!"
+if [ $(check_win) == "T" ]; then
+	echo "It's a tie!"
+else
+	echo "Player "$(check_win)" won!"
+fi
 print_board
 
