@@ -23,18 +23,20 @@ func main () {
 	// Play game.
 	for !CheckWin(PlayerOneBoard, PlayerTwoSubmarines) && !CheckWin(PlayerTwoBoard, PlayerOneSubmarines) {
 		if current_player == 1 {
-			MakeMove(PlayerOneBoard, PlayerTwoSubmarines)
+			PlayerOneBoard = MakeMove(PlayerOneBoard, PlayerTwoSubmarines)
+			ShowBoard(PlayerOneBoard)
 		} else if current_player == 2 {
-			MakeMove(PlayerTwoBoard, PlayerOneSubmarines)
+			PlayerTwoBoard = MakeMove(PlayerTwoBoard, PlayerOneSubmarines)
+			ShowBoard(PlayerTwoBoard)
 		}
-		ShowBoard(PlayerOneBoard)
-		current_player = RotatePlayer()
+		current_player = RotatePlayer(current_player)
 	}
 
 	// Ending.
-	current_player = RotatePlayer()
+	current_player = RotatePlayer(current_player)
 	fmt.Printf("Player number %d wins!\n", current_player)
 	fmt.Println("The board of player 1:")
 	ShowBoard(PlayerOneBoard)
 	fmt.Println("The board of player 2:")
 	ShowBoard(PlayerTwoBoard)
+}

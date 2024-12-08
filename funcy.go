@@ -49,6 +49,7 @@ func ChooseSubLoc () Submarines {
 		sub3: GetSubLoc(3),
 		sub2: GetSubLoc(2),
 	}
+	fmt.Println()
 
 	return submarines
 }
@@ -152,38 +153,44 @@ func GenerateSub (start string, end string, length int) []string {
 	return sub
 }
 
-func CheckWin (board [11][11]string, submarines Submarines) {
+func CheckWin (board [11][11]string, submarines Submarines) bool {
 	score := 0
 	for i := 0; i < len(board); i++ {
 		for j := 0; j < len(board[i]); j++ {
-			if board[i][j] == 9 {
-				return true
+			if board[i][j] == "X" {
+				score++
+			}
 		}
 	}
-	return false
+	if score == 9 {
+		return true
+	} else {
+		return false
+	}
 }
 
-func MakeMove (board [11][11]string, submarines Submarines) {
+func MakeMove (board [11][11]string, submarines Submarines, current_player int) [11][11]string {
 	var move string
-	fmt.Println("Please choose your move:")
+	fmt.Println("Player %d, please choose your move:", current_player)
 	fmt.Scanln(&move)
-	for !OutOfBoundsLoc {
+	for !OutOfBoundsLoc(move) {
 		fmt.Println("Make sure the move is valid:")
 		fmt.Scanln(&move)
 	}
-	submarines_combined := append(submarines.sub4[:], submarines.sub3[:], submarines.sub2[:])i
+	submarines_combined := append(append(submarines.sub4[:], submarines.sub3[:]...), submarines.sub2[:]...)
 	row, col := TranslateLocToBoard(move)
 	for _, loc := range submarines_combined {
 		if loc == move {
 			// X resembles an hit.
 			fmt.Println("It's a hit!")
-			board[row][col] = 'X'
-		} else {
-			// - resembles a miss.
-			fmt.Println("It's a miss.")
-			board[row][col] = '-'
+			board[row][col] = "X"
+			return board
 		}
-
+	}
+	// - resembles a miss.
+	fmt.Println("It's a miss.")
+	board[row][col] = "-"
+	return board
 }
 
 func TranslateLocToBoard (loc string) (int, int) {
