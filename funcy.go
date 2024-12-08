@@ -6,6 +6,12 @@ import (
 	"strconv"
 )
 
+type Submarines struct {
+	sub4 []string
+	sub3 []string
+	sub2 []string
+}
+
 func InitiateBoard() [11][11]string {
 	firstcol := [11]string{"@", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J"}
 	var board [11][11]string
@@ -30,43 +36,21 @@ func ShowBoard(board [11][11]string) {
         	}
         	fmt.Println() 
     	}
+	fmt.Println()
 }
 
 func ChooseStarter() int {
 	return rand.IntN(2)+1
 }
 
-func ChooseSubLoc submarines () {
-	type submarines struct {
-		sub4 [4]string
-		sub3 [3]string
-		sub2 [2]string
+func ChooseSubLoc () Submarines {
+	submarines := Submarines{
+		sub4: GetSubLoc(4),
+		sub3: GetSubLoc(3),
+		sub2: GetSubLoc(2),
 	}
-	
-	var start4 string
-	var end4 string
-	var start3 string
-	var end3 string
-	var start2 string
-	var end2 string
 
-	fmt.Println("Enter the starting location of the 4-length submarine: ")
-    	fmt.Scanln(&start4)
-	for !LocCheck(start4) {
-		fmt.Println("Location not within board bounds, please try again (examples: A4, J9, B1): ")
-		fmt.Scanln(&start4)
-	}
-	fmt.Println("Enter the ending location of the 4-length submarine, make sure its 4 length: ")
-	fmt.Scanln(&end4)
-	for !LocCheck(end4) {
-		fmt.Println("Location not within board bounds, please try again (examples: A4, J9, B1): ")
-		fmt.Scanln(&end4)
-	}
-	for !CheckSubLen(start4, end4, 4) {
-		fmt.Println("Ending location is not 4 length from the starting location, please try again (examples A4-A7, A4-D4): "
-		fmt.Scanln(&end4)
-	}
-	
+	return submarines
 }
 
 func OutOfBoundsLoc (loc string) bool {
@@ -77,22 +61,6 @@ func OutOfBoundsLoc (loc string) bool {
 		} else {
 			return false
 		}
-	} else {
-		return false
-	}
-}
-
-func CheckLocLength (loc string) bool {
-	if len(loc) == 2 {
-		return true
-	} else {
-		return false
-	}
-}
-
-func LocCheck (loc string) bool {
-	if CheckLocLength(loc) && OutOfBoundsLoc(loc) {
-		return true
 	} else {
 		return false
 	}
@@ -111,6 +79,46 @@ func ShiftCharacter (c rune, shift int) string {
 	return string('A' + shifted)
 }
 
+func GetSubLoc (length int) []string {
+	var start string
+        var end string
+
+        fmt.Printf("Enter the starting location of the %d-length submarine:\n", length)
+        fmt.Scanln(&start)
+        for !OutOfBoundsLoc(start) {
+                fmt.Println("Location not within board bounds, please try again (examples: A4, J9, B1): ")
+                fmt.Scanln(&start)
+        }
+        fmt.Printf("Enter the ending location of the %d-length submarine, make sure its %d length:\n", length, length)
+        fmt.Scanln(&end)
+        for !OutOfBoundsLoc(end) {
+                fmt.Println("Location not within board bounds, please try again (examples: A4, J9, B1): ")
+                fmt.Scanln(&end)
+        }
+        for !CheckSubLen(start, end, length) {
+		fmt.Printf("Ending location is not %d length from the starting location\n" + 
+		"Examples: 4-length - A4-A7 / A4-D4, 3-length - B2-B4 / B2-D2, 2-length - G9-G10 / G9-H9:\n", length)
+                fmt.Scanln(&end)
+        }
+	return GenerateSub(start, end, length)
+}
+
+func GenerateSub (start string, end string, length int) []string {
+	var sub []string
+	sub = make([]string, length)
+	if start[0] == end[0] {
+		// horizontal
+		for i := 0; i < length; i++ {
+			sub[i] = string(start[0]) + string(int(start[1])+i)
+		}
+	} else {
+		// vertical
+		for i := 0; i < length; i++ {
+			sub[i] = ShiftCharacter(rune(start[0]), i) + string(start[1])
+		}
+	}
+	return sub
+}
 
 
 

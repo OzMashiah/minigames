@@ -11,5 +11,6 @@ func main () {
 	PlayerTwoBoard := InitiateBoard()
 	ShowBoard(PlayerOneBoard)
 	ShowBoard(PlayerTwoBoard)
-	ChooseSubLoc()
+	submarines := ChooseSubLoc()
+	fmt.Println(submarines)
 }
