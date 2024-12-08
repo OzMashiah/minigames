@@ -67,7 +67,8 @@ func OutOfBoundsLoc (loc string) bool {
 }
 
 func CheckSubLen (start string, end string, length int) bool {
-	if ShiftCharacter(rune(start[0]), length-1) == string(end[0]) || int(start[1]) + length-1 == int(end[1]) {
+	if ShiftCharacter(rune(start[0]), length-1) == string(end[0]) || int(start[1]) + length - 1 == int(end[1]) ||
+	string(start[0]) == ShiftCharacter(rune(end[0]), length-1) || int(start[1]) == int(end[1]) + length - 1 {
 		return true
 	} else {
 		return false
@@ -106,19 +107,40 @@ func GetSubLoc (length int) []string {
 func GenerateSub (start string, end string, length int) []string {
 	var sub []string
 	sub = make([]string, length)
-	if start[0] == end[0] {
+	start_char := start[:1]
+	end_char := end[:1]
+	start_num := start[1:]
+	end_num := end[1:]
+	int_num, _ := strconv.Atoi(start_num)
+
+	if start_char == end_char {
 		// horizontal
-		for i := 0; i < length; i++ {
-			sub[i] = string(start[0]) + string(int(start[1])+i)
+		if start_num < end_num {
+			// foreward
+			for i := 0; i < length; i++ {
+				str_num := strconv.Itoa(int_num+i)
+				sub[i] = string(start_char) + str_num
+			}
+		} else {
+			// backward
+			for i := 0; i < length; i++ {
+				str_num := strconv.Itoa(int_num-i)
+				sub[i] = string(start_char) + str_num
+			}
 		}
 	} else {
 		// vertical
-		for i := 0; i < length; i++ {
-			sub[i] = ShiftCharacter(rune(start[0]), i) + string(start[1])
+		if start_char < end_char {
+			// foreward
+			for i := 0; i < length; i++ {
+				sub[i] = ShiftCharacter(rune(start_char[0]), i) + string(start_num)
+			}
+		} else {
+			// backward
+			for i := 0; i < length; i++ {
+				sub[i] = ShiftCharacter(rune(end_char[0]), i) + string(end_num)
+			}
 		}
 	}
 	return sub
 }
-
-
-
