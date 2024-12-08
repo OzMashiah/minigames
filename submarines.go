@@ -10,4 +10,6 @@ func main () {
 	PlayerOneBoard := InitiateBoard()
 	PlayerTwoBoard := InitiateBoard()
 	ShowBoard(PlayerOneBoard)
+	ShowBoard(PlayerTwoBoard)
+	ChooseSubLoc()
 }
