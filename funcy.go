@@ -163,15 +163,24 @@ func CheckWin (board [11][11]string, submarines Submarines) {
 	return false
 }
 
-func MakeMove (board [11][11]string, submarines Submarines, move string) {
-	submarines_combined := append(sub4[:], sub3[:], sub2[:])
+func MakeMove (board [11][11]string, submarines Submarines) {
+	var move string
+	fmt.Println("Please choose your move:")
+	fmt.Scanln(&move)
+	for !OutOfBoundsLoc {
+		fmt.Println("Make sure the move is valid:")
+		fmt.Scanln(&move)
+	}
+	submarines_combined := append(submarines.sub4[:], submarines.sub3[:], submarines.sub2[:])i
 	row, col := TranslateLocToBoard(move)
 	for _, loc := range submarines_combined {
 		if loc == move {
 			// X resembles an hit.
+			fmt.Println("It's a hit!")
 			board[row][col] = 'X'
 		} else {
 			// - resembles a miss.
+			fmt.Println("It's a miss.")
 			board[row][col] = '-'
 		}
 
@@ -185,5 +194,13 @@ func TranslateLocToBoard (loc string) (int, int) {
 	col, _ := strconv.Atoi(colNum)
 
 	return row, col
+}
+
+func RotatePlayer (current int) int {
+	if current == 1 {
+		return 2
+	} else {
+		return 1
+	}
 }
 
