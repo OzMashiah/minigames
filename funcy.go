@@ -57,7 +57,7 @@ func ChooseSubLoc () Submarines {
 func OutOfBoundsLoc (loc string) bool {
 	if len(loc) == 2 || len(loc) == 3 {
 		if loc[0] >= 'A' && loc[0] <= 'J' {
-			num, err := strconv.Atoi(string(loc[1]))
+			num, err := strconv.Atoi(string(loc[1:]))
 			if err == nil && num >= 1 && num <= 10 {
 				return true
 			} else {
@@ -171,7 +171,7 @@ func CheckWin (board [11][11]string, submarines Submarines) bool {
 
 func MakeMove (board [11][11]string, submarines Submarines, current_player int) [11][11]string {
 	var move string
-	fmt.Println("Player %d, please choose your move:", current_player)
+	fmt.Printf("Player %d, please choose your move:\n", current_player)
 	fmt.Scanln(&move)
 	for !OutOfBoundsLoc(move) {
 		fmt.Println("Make sure the move is valid:")

@@ -23,10 +23,10 @@ func main () {
 	// Play game.
 	for !CheckWin(PlayerOneBoard, PlayerTwoSubmarines) && !CheckWin(PlayerTwoBoard, PlayerOneSubmarines) {
 		if current_player == 1 {
-			PlayerOneBoard = MakeMove(PlayerOneBoard, PlayerTwoSubmarines)
+			PlayerOneBoard = MakeMove(PlayerOneBoard, PlayerTwoSubmarines, current_player)
 			ShowBoard(PlayerOneBoard)
 		} else if current_player == 2 {
-			PlayerTwoBoard = MakeMove(PlayerTwoBoard, PlayerOneSubmarines)
+			PlayerTwoBoard = MakeMove(PlayerTwoBoard, PlayerOneSubmarines, current_player)
 			ShowBoard(PlayerTwoBoard)
 		}
 		current_player = RotatePlayer(current_player)
