@@ -1,12 +1,6 @@
 # Builder container
-FROM node
+FROM nginx:alpine
 
-WORKDIR /usr/src/app
+COPY frontend_files/index.html /usr/share/nginx/html
 
-COPY frontend_files ./
-
-RUN npm install 
-
-EXPOSE 3000
-
-CMD ["node", "index.js"] 
+EXPOSE 80

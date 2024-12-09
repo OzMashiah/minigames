@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess The Number Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        #result {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input, button {
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Guess The Number Game</h1>
+    <p>Guess a number between 1 and 100.</p>
+    <input type="number" id="guessInput" placeholder="Enter your guess">
+    <button onclick="submitGuess()">Submit Guess</button>
+    <div id="result"></div>
+
+    <br><br>
+    <button onclick="resetGame()">Reset Game</button>
+
+    <script>
+        async function submitGuess() {
+            const guess = document.getElementById("guessInput").value;
+            if (guess === "") {
+                alert("Please enter a guess.");
+                return;
+            }
+
+            const response = await fetch('http://localhost:5000/guess', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ guess: parseInt(guess) })
+            });
+
+            const data = await response.json();
+            document.getElementById("result").textContent = data.message;
+            document.getElementById("guessInput").value = ""; // Clear input
+        }
+
+        async function resetGame() {
+            const response = await fetch('http://localhost:5000/reset', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const data = await response.json();
+            document.getElementById("result").textContent = data.message;
+        }
+    </script>
+
+</body>
+</html>
+
