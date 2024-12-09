@@ -1,7 +1,7 @@
 # minigames
 This repository contains the following minigames that can be played from your bash shell:
 * Guess The Number written in python with three difficulties [Easy, Medium, Hard]. 
-    Should be ran using 'python3 guessthenumber.py <difficulty>', for example, python3 guessthenumber.py Medium.
+    Should be ran using 'python3 guessthenumber.py <difficulty>', for example, 'python3 guessthenumber.py Medium'.
 * Tic Tac Toe written in bash.
     Should be ran using './tictactoe.sh'
 * Submarines written in golang.
